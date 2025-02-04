@@ -1,0 +1,135 @@
+---
+title: Stepper
+description: This section previews the stepper component.
+---
+
+In this guide, we utilize a custom `Stepper` component, specifically designed for AriaDocs, which enables users to display step-by-step instructions directly within the markdown render.
+
+## Basic Usage
+<ComponentPreview
+code={`
+import { cn } from "@/lib/utils";
+import clsx from "clsx";
+import { Children, PropsWithChildren } from "react";
+
+export function Stepper({ children }: PropsWithChildren) {
+  const length = Children.count(children);
+  return (
+    <div className="flex flex-col my-5 md:my-10 pl-[4px] md:px-4 py-3 md:py-7 rounded-xl">
+      {Children.map(children, (child, index) => {
+        return (
+          <div
+            className={cn(
+              "border-l pl-8 ml-3 relative",
+              clsx({
+                "pb-5 ": index < length - 1,
+              })
+            )}
+          >
+            <div className="bg-muted w-8 h-8 text-xs font-medium rounded-md border flex items-center justify-center absolute -left-4 font-code">
+              {index + 1}
+            </div>
+            {child}
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+export function StepperItem({
+  children,
+  title,
+}: PropsWithChildren & { title?: string }) {
+  return (
+    <div className="pt-0.5">
+      <h4 className="mt-0">{title}</h4>
+      <div>{children}</div>
+    </div>
+  );
+}
+
+`}
+>
+<Stepper>
+  <StepperItem title="Step 1: Clone the AriaDocs Repository">
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec interdum,
+    felis sed efficitur tincidunt, justo nulla viverra enim, et maximus nunc
+    dolor in lorem.
+  </StepperItem>
+  <StepperItem title="Step 2: Access the Project Directory">
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin non neque ut
+    eros auctor accumsan. Mauris a nisl vitae magna ultricies aliquam.
+  </StepperItem>
+  <StepperItem title="Step 3: Install Required Dependencies">
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque ut
+    ipsum nec nulla ultricies porttitor et non justo.
+  </StepperItem>
+</Stepper>
+</ComponentPreview>
+
+## First
+<Stepper>
+  <StepperItem title="Step 1: Create Component file">
+    Create a new file in the `components` directory with the name `stepper.tsx`.
+  </StepperItem>
+  <StepperItem title="Step 2: Create utils file">
+      Create a new file named `utils.ts` in the `lib` directory and add the following code:
+      <CodeView
+      language="tsx"
+      code={`
+import { ClassValue, clsx } from "clsx";
+import { twMerge } from "tailwind-merge";
+
+export function cn(...inputs: ClassValue[]) {
+return twMerge(clsx(inputs));
+}
+`}/>
+  </StepperItem>
+  <StepperItem title="Step 3: Add Component Code">
+  in `stepper.tsx` add the following code:
+    <CodeView
+  language="tsx"
+  code={`
+  import { cn } from "@/lib/utils";
+import clsx from "clsx";
+import { Children, PropsWithChildren } from "react";
+
+export function Stepper({ children }: PropsWithChildren) {
+  const length = Children.count(children);
+  return (
+    <div className="flex flex-col my-5 md:my-10 pl-[4px] md:px-4 py-3 md:py-7 rounded-xl">
+      {Children.map(children, (child, index) => {
+        return (
+          <div
+            className={cn(
+              "border-l pl-8 ml-3 relative",
+              clsx({
+                "pb-5 ": index < length - 1,
+              })
+            )}
+          >
+            <div className="bg-muted w-8 h-8 text-xs font-medium rounded-md border flex items-center justify-center absolute -left-4 font-code">
+              {index + 1}
+            </div>
+            {child}
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+export function StepperItem({
+  children,
+  title,
+}: PropsWithChildren & { title?: string }) {
+  return (
+    <div className="pt-0.5">
+      <h4 className="mt-0">{title}</h4>
+      <div>{children}</div>
+    </div>
+  );
+}`} />
+  </StepperItem>
+</Stepper>

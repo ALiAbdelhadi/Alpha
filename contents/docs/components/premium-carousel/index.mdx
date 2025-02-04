@@ -1,0 +1,925 @@
+---
+title: Premium Carousel
+description: Clearly visualize sequences of events, project milestones, and historical data with our flexible Timeline component.
+---
+
+## Preview
+
+This is a preview for the premium carousel
+
+<ComponentPreview id="carousel-1"
+  code={`"use client"
+
+import { useOutsideClick } from "@/hooks/outSideClick"
+import { cn } from "@/lib/utils"
+import { IconArrowNarrowLeft, IconArrowNarrowRight } from "@tabler/icons-react"
+import { motion } from "framer-motion"
+import Image, { type ImageProps } from "next/image"
+import { createContext, Fragment, type JSX, useContext, useEffect, useRef, useState } from "react"
+
+interface CarouselProps {
+   items: JSX.Element[]
+   initialScroll?: number
+   cardGap?: number
+   scrollOffset?: number
+}
+
+interface Card {
+   src: string
+   title: string
+   category: string
+}
+
+const CarouselContext = createContext<{
+   onCardClick: (index: number) => void
+   currentIndex: number
+}>({
+   onCardClick: () => { },
+   currentIndex: 0,
+})
+
+export const Carousel = ({ items, initialScroll = 0, cardGap = 16, scrollOffset = 300 }: CarouselProps) => {
+   const carouselRef = useRef<HTMLDivElement>(null)
+   const [canScrollLeft, setCanScrollLeft] = useState(false)
+   const [canScrollRight, setCanScrollRight] = useState(true)
+   const [currentIndex, setCurrentIndex] = useState(0)
+
+   const checkScrollAbility = () => {
+      if (carouselRef.current) {
+         const { scrollLeft, scrollWidth, clientWidth } = carouselRef.current
+         setCanScrollLeft(scrollLeft > 0)
+         setCanScrollRight(scrollLeft < scrollWidth - clientWidth)
+      }
+   }
+
+   useEffect(() => {
+      if (carouselRef.current) {
+         carouselRef.current.scrollLeft = initialScroll
+         checkScrollAbility()
+      }
+   }, [initialScroll])
+
+   const scrollToIndex = (index: number) => {
+      if (carouselRef.current) {
+         const cards = carouselRef.current.children[0].children
+         if (index >= 0 && index < cards.length) {
+            const card = cards[index] as HTMLElement
+            const scrollLeft = card.offsetLeft - carouselRef.current.offsetLeft
+            carouselRef.current.scrollTo({
+               left: scrollLeft,
+               behavior: "smooth",
+            })
+            setCurrentIndex(index)
+         }
+      }
+   }
+
+   const scroll = (direction: "left" | "right") => {
+      const newIndex = direction === "left" ? currentIndex - 1 : currentIndex + 1
+      scrollToIndex(newIndex)
+   }
+
+   const handleCarouselClick = (index: number) => {
+      scrollToIndex(index)
+   }
+
+   return (
+      <CarouselContext.Provider value={{ onCardClick: handleCarouselClick, currentIndex }}>
+         <div className="relative w-full py-0 !my-12 ">
+            <div className="flex justify-end space-x-2">
+               <button
+                  className="relative z-40 h-12 w-12 rounded-full bg-gray-100 flex items-center justify-center disabled:opacity-50"
+                  onClick={() => scroll("left")}
+                  disabled={!canScrollLeft}
+               >
+                  <IconArrowNarrowLeft className="h-7 w-7 text-gray-500" />
+               </button>
+               <button
+                  className="relative z-40 h-12 w-12 rounded-full bg-gray-100 flex items-center justify-center disabled:opacity-50"
+                  onClick={() => scroll("right")}
+                  disabled={!canScrollRight}
+               >
+                  <IconArrowNarrowRight className="h-7 w-7 text-gray-500" />
+               </button>
+            </div>
+            <div
+               className="flex w-full overflow-x-scroll py-6 scroll-smooth [scrollbar-width:none]"
+               ref={carouselRef}
+               onScroll={checkScrollAbility}
+            >
+               <div className="flex flex-row justify-end gap-4 pl-4" style={{ gap: \`\${cardGap}px\` }}>
+                  {items.map((item, index) => (
+                     <motion.div
+                        key={index}
+                        className="rounded-3xl"
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0, transition: { duration: 0.5, delay: 0.3 * index } }}
+                     >
+                        {item}
+                     </motion.div>
+                  ))}
+               </div>
+            </div>
+         </div>
+      </CarouselContext.Provider>
+   )
+}
+
+export const Card = ({ card, index, layout = false }: { card: Card; index: number; layout?: boolean }) => {
+   const [isOpen, setIsOpen] = useState(false)
+   const containerRef = useRef<HTMLDivElement>(null)
+   const cardRef = useRef<HTMLDivElement>(null)
+   useOutsideClick(containerRef, () => setIsOpen(false))
+   const { onCardClick } = useContext(CarouselContext)
+
+   const handleCardClick = () => {
+      setIsOpen(true)
+      onCardClick(index)
+      if (cardRef.current) {
+         cardRef.current.scrollIntoView({
+            behavior: "smooth",
+            block: "nearest",
+            inline: "center",
+         })
+      }
+   }
+
+   return (
+      <Fragment>
+         <motion.div
+            ref={cardRef}
+            layoutId={layout ? \`card-\${card.title}\` : undefined}
+            onClick={handleCardClick}
+            className="rounded-3xl cursor-pointer bg-gray-100 dark:bg-neutral-900 h-[18rem] md:h-[37rem] w-56 md:w-96 overflow-hidden flex flex-col items-start justify-start relative z-10"
+         >
+            <div className="absolute h-full top-0 inset-x-0 bg-gradient-to-b from-black/50 via-transparent to-transparent z-30 pointer-events-none" />
+            <div className="relative z-40 p-4 md:p-8">
+               <motion.p
+                  layoutId={layout ? \`category-\${card.category}\` : undefined}
+                  className="text-white/60 text-sm md:text-base font-medium font-sans text-left"
+               >
+                  {card.category}
+               </motion.p>
+               <motion.p
+                     layoutId={layout ? \`title-\${card.title}\` : undefined}
+                     className="text-white text-lg md:text-xl lg:text-3xl font-semibold max-w-xs text-left"
+                  >
+                     {card.title}
+               </motion.p>
+            </div>
+               <BlurImage
+                  src={card.src}
+                  alt={card.title}
+                  fill
+                  className="object-cover absolute z-10 inset-0"
+               />
+            </motion.div>
+      </Fragment>
+   )
+}
+
+export const BlurImage = ({ height, width, src, className, alt, ...rest }: ImageProps) => {
+   const [isLoading, setLoading] = useState(true)
+   return (
+      <Image
+         className={cn("transition duration-300", isLoading ? "blur-sm" : "blur-0", className)}
+         onLoad={() => setLoading(false)}
+         src={src || "/placeholder.svg"}
+         width={width}
+         height={height}
+         loading="lazy"
+         decoding="async"
+         blurDataURL={typeof src === "string" ? src : undefined}
+         alt={alt ? alt : "Background of a beautiful view"}
+         {...rest}
+      />
+   )
+}
+`}
+>
+
+<CarouselContainer />
+</ComponentPreview>
+## Installation
+<Stepper title="Carousel" description="Stunning carousel component for your projects.">
+   <StepperItem title={"Step 1 : Installation"}>
+      <CodeView language="bash"code={`npm i framer-motion clsx tailwind-merge @tabler/icons-react`} />
+      First install the Dependencies packages: 
+   <Note type="note" title="Note">
+      if you're Using React 19 you should use the following command:
+         <CodeView language="bash" code={`npm i framer-motion clsx tailwind-merge @tabler/icons-react --legacy-peer-deps`} />
+   </Note>
+   </StepperItem>
+   <StepperItem title="Step 2 : Create lib/utils.ts ">
+      Create a new file named `utils.ts` in the `lib` directory and add the following code:
+      <CodeView
+      language="tsx"
+      code={`import { ClassValue, clsx } from "clsx";
+import { twMerge } from "tailwind-merge";
+
+export function cn(...inputs: ClassValue[]) {
+return twMerge(clsx(inputs));
+}
+`}/>
+   </StepperItem>
+   <StepperItem title="Step 3 : Create Carousel.tsx Component">
+  You can put it in `components/Carousel.tsx` and add the following code:
+  <CodeView 
+  language="tsx"
+  code={`"use client"
+
+import { useOutsideClick } from "@/hooks/outSideClick"
+import { cn } from "@/lib/utils"
+import { IconArrowNarrowLeft, IconArrowNarrowRight } from "@tabler/icons-react"
+import { motion } from "framer-motion"
+import Image, { type ImageProps } from "next/image"
+import { createContext, Fragment, type JSX, useContext, useEffect, useRef, useState } from "react"
+
+interface CarouselProps {
+   items: JSX.Element[]
+   initialScroll?: number
+   cardGap?: number
+   scrollOffset?: number
+}
+
+interface Card {
+   src: string
+   title: string
+   category: string
+}
+
+const CarouselContext = createContext<{
+   onCardClick: (index: number) => void
+   currentIndex: number
+}>({
+   onCardClick: () => { },
+   currentIndex: 0,
+})
+
+export const Carousel = ({ items, initialScroll = 0, cardGap = 16, scrollOffset = 300 }: CarouselProps) => {
+   const carouselRef = useRef<HTMLDivElement>(null)
+   const [canScrollLeft, setCanScrollLeft] = useState(false)
+   const [canScrollRight, setCanScrollRight] = useState(true)
+   const [currentIndex, setCurrentIndex] = useState(0)
+
+   const checkScrollAbility = () => {
+      if (carouselRef.current) {
+         const { scrollLeft, scrollWidth, clientWidth } = carouselRef.current
+         setCanScrollLeft(scrollLeft > 0)
+         setCanScrollRight(scrollLeft < scrollWidth - clientWidth)
+      }
+   }
+
+   useEffect(() => {
+      if (carouselRef.current) {
+         carouselRef.current.scrollLeft = initialScroll
+         checkScrollAbility()
+      }
+   }, [initialScroll])
+
+   const scrollToIndex = (index: number) => {
+      if (carouselRef.current) {
+         const cards = carouselRef.current.children[0].children
+         if (index >= 0 && index < cards.length) {
+            const card = cards[index] as HTMLElement
+            const scrollLeft = card.offsetLeft - carouselRef.current.offsetLeft
+            carouselRef.current.scrollTo({
+               left: scrollLeft,
+               behavior: "smooth",
+            })
+            setCurrentIndex(index)
+         }
+      }
+   }
+
+   const scroll = (direction: "left" | "right") => {
+      const newIndex = direction === "left" ? currentIndex - 1 : currentIndex + 1
+      scrollToIndex(newIndex)
+   }
+
+   const handleCarouselClick = (index: number) => {
+      scrollToIndex(index)
+   }
+
+   return (
+      <CarouselContext.Provider value={{ onCardClick: handleCarouselClick, currentIndex }}>
+         <div className="relative w-full py-0 !my-12 ">
+            <div className="flex justify-end space-x-2">
+               <button
+                  className="relative z-40 h-12 w-12 rounded-full bg-gray-100 flex items-center justify-center disabled:opacity-50"
+                  onClick={() => scroll("left")}
+                  disabled={!canScrollLeft}
+               >
+                  <IconArrowNarrowLeft className="h-7 w-7 text-gray-500" />
+               </button>
+               <button
+                  className="relative z-40 h-12 w-12 rounded-full bg-gray-100 flex items-center justify-center disabled:opacity-50"
+                  onClick={() => scroll("right")}
+                  disabled={!canScrollRight}
+               >
+                  <IconArrowNarrowRight className="h-7 w-7 text-gray-500" />
+               </button>
+            </div>
+            <div
+               className="flex w-full overflow-x-scroll py-6 scroll-smooth [scrollbar-width:none]"
+               ref={carouselRef}
+               onScroll={checkScrollAbility}
+            >
+               <div className="flex flex-row justify-end gap-4 pl-4" style={{ gap: \`\${cardGap}px\` }}>
+                  {items.map((item, index) => (
+                     <motion.div
+                        key={index}
+                        className="rounded-3xl"
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0, transition: { duration: 0.5, delay: 0.3 * index } }}
+                     >
+                        {item}
+                     </motion.div>
+                  ))}
+               </div>
+            </div>
+         </div>
+      </CarouselContext.Provider>
+   )
+}
+
+export const Card = ({ card, index, layout = false }: { card: Card; index: number; layout?: boolean }) => {
+   const [isOpen, setIsOpen] = useState(false)
+   const containerRef = useRef<HTMLDivElement>(null)
+   const cardRef = useRef<HTMLDivElement>(null)
+   useOutsideClick(containerRef, () => setIsOpen(false))
+   const { onCardClick } = useContext(CarouselContext)
+
+   const handleCardClick = () => {
+      setIsOpen(true)
+      onCardClick(index)
+      if (cardRef.current) {
+         cardRef.current.scrollIntoView({
+            behavior: "smooth",
+            block: "nearest",
+            inline: "center",
+         })
+      }
+   }
+
+   return (
+      <Fragment>
+         <motion.div
+            ref={cardRef}
+            layoutId={layout ? \`card-\${card.title}\` : undefined}
+            onClick={handleCardClick}
+            className="rounded-3xl cursor-pointer bg-gray-100 dark:bg-neutral-900 h-[18rem] md:h-[37rem] w-56 md:w-96 overflow-hidden flex flex-col items-start justify-start relative z-10"
+         >
+            <div className="absolute h-full top-0 inset-x-0 bg-gradient-to-b from-black/50 via-transparent to-transparent z-30 pointer-events-none" />
+            <div className="relative z-40 p-4 md:p-8">
+               <motion.p
+                  layoutId={layout ? \`category-\${card.category}\` : undefined}
+                  className="text-white/60 text-sm md:text-base font-medium font-sans text-left"
+               >
+                  {card.category}
+               </motion.p>
+               <motion.p
+                     layoutId={layout ? \`title-\${card.title}\` : undefined}
+                     className="text-white text-lg md:text-xl lg:text-3xl font-semibold max-w-xs text-left"
+                  >
+                     {card.title}
+               </motion.p>
+            </div>
+               <BlurImage
+                  src={card.src}
+                  alt={card.title}
+                  fill
+                  className="object-cover absolute z-10 inset-0"
+               />
+            </motion.div>
+      </Fragment>
+   )
+}
+
+export const BlurImage = ({ height, width, src, className, alt, ...rest }: ImageProps) => {
+   const [isLoading, setLoading] = useState(true)
+   return (
+      <Image
+         className={cn("transition duration-300", isLoading ? "blur-sm" : "blur-0", className)}
+         onLoad={() => setLoading(false)}
+         src={src || "/placeholder.svg"}
+         width={width}
+         height={height}
+         loading="lazy"
+         decoding="async"
+         blurDataURL={typeof src === "string" ? src : undefined}
+         alt={alt ? alt : "Background of a beautiful view"}
+         {...rest}
+      />
+   )
+}`}/>
+  </StepperItem>
+   <StepperItem title="Step 4 : Create Index.tsx">
+  Create a new folder Called `Constant` in the `app` directory and create an `index.tsx` file and add the following object on it<br/> 
+  this object has the data of carousel items: 
+  <CodeView 
+  language={"Tsx"}
+  code={`
+  export const CarouselsData = [
+    {
+        category: "Artificial Intelligence",
+        title: "You can do more with AI.",
+        src: "/image-1.jpg",
+    },
+    {
+        category: "Productivity",
+        title: "Enhance your productivity.",
+        src: "/image-2.jpg",
+    },
+    {
+        category: "Product",
+        title: "Launching the new Apple Vision Pro.",
+        src: "/image-3.jpg",
+    }
+];`} />
+  </StepperItem>
+   <StepperItem title="Step 5 : Create Another file to wrap the Carousel">
+   You can put it in `components/CarouselContainer.tsx` and add the following code:
+   <CodeView
+   language="tsx"
+   code={`
+   import { CarouselsData } from '@/app/constant';
+   import { Card, Carousel } from './Carousel';
+
+   const CarouselContainer = () => {
+      const cards = CarouselsData.map((card, index) => (
+         <Card key={card.src} card={card} index={index} />
+      ));
+      return (
+            <Carousel items={cards} />
+      )
+   }
+
+export default CarouselContainer
+   `}
+   />
+   </StepperItem>
+</Stepper>
+
+## Preview Two
+
+This is a preview for the premium carousel
+<ComponentPreview id="carousel-2"
+  code={`"use client"
+
+import { useOutsideClick } from "@/hooks/outSideClick"
+import { cn } from "@/lib/utils"
+import { IconArrowNarrowLeft, IconArrowNarrowRight } from "@tabler/icons-react"
+import { motion } from "framer-motion"
+import Image, { type ImageProps } from "next/image"
+import { createContext, Fragment, type JSX, useEffect, useRef, useState } from "react"
+
+interface CarouselProps {
+   items: JSX.Element[]
+   initialScroll?: number
+   cardGap?: number
+   scrollOffset?: number
+   initialActiveIndex?: number
+}
+
+interface Project {
+   id: number
+   title: string
+   description: string
+   image: string
+   link: string
+}
+
+const CarouselContext = createContext<{
+   onCardClick: (index: number) => void
+   currentIndex: number
+}>({
+   onCardClick: () => { },
+   currentIndex: 0,
+})
+
+export const CarouselProject = ({
+   items,
+   initialScroll = 0,
+   cardGap = 16,
+   scrollOffset: initialScrollOffset,
+   initialActiveIndex = 1,
+}: CarouselProps) => {
+   const carouselRef = useRef<HTMLDivElement>(null)
+   const [canScrollLeft, setCanScrollLeft] = useState(false)
+   const [canScrollRight, setCanScrollRight] = useState(true)
+   const [currentIndex, setCurrentIndex] = useState(initialActiveIndex)
+
+   const checkScrollAbility = () => {
+      if (carouselRef.current) {
+         const { scrollLeft, scrollWidth, clientWidth } = carouselRef.current
+         setCanScrollLeft(scrollLeft > 0)
+         setCanScrollRight(scrollLeft < scrollWidth - clientWidth)
+      }
+   }
+
+   useEffect(() => {
+      if (carouselRef.current && initialActiveIndex !== undefined) {
+         scrollToIndex(initialActiveIndex)
+      }
+   }, [initialActiveIndex])
+
+   const scrollToIndex = (index: number) => {
+      if (carouselRef.current) {
+         const boxes = carouselRef.current.children[0].children
+         if (index >= 0 && index < boxes.length) {
+            const box = boxes[index] as HTMLElement
+            const scrollLeft = box.offsetLeft - carouselRef.current.offsetLeft
+            carouselRef.current.scrollTo({
+               left: scrollLeft,
+               behavior: "smooth",
+            })
+            setCurrentIndex(index)
+         }
+      }
+   }
+
+   const scroll = (direction: "left" | "right") => {
+      const newIndex = direction === "left" ? currentIndex - 1 : currentIndex + 1
+      scrollToIndex(newIndex)
+   }
+
+   const handleCarouselClick = (index: number) => {
+      scrollToIndex(index)
+   }
+
+   return (
+      <CarouselContext.Provider value={{ onCardClick: handleCarouselClick, currentIndex }}>
+         <div className="relative w-full py-0 !my-12 ">
+            <div className="flex justify-end space-x-2">
+               <button
+                  className="relative z-40 h-12 w-12 rounded-full bg-gray-100 flex items-center justify-center disabled:opacity-50"
+                  onClick={() => scroll("left")}
+                  disabled={!canScrollLeft}
+               >
+                  <IconArrowNarrowLeft className="h-7 w-7 text-gray-500" />
+               </button>
+               <button
+                  className="relative z-40 h-12 w-12 rounded-full bg-gray-100 flex items-center justify-center disabled:opacity-50"
+                  onClick={() => scroll("right")}
+                  disabled={!canScrollRight}
+               >
+                  <IconArrowNarrowRight className="h-7 w-7 text-gray-500" />
+               </button>
+            </div>
+            <div
+               className="flex w-full overflow-x-scroll py-6 scroll-smooth [scrollbar-width:none]"
+               ref={carouselRef}
+               onScroll={checkScrollAbility}
+            >
+               <div className="flex flex-row justify-end gap-4 pl-4" style={{ gap: \`\${cardGap}px\` }}>
+                  {items.map((item, index) => (
+                     <motion.div
+                        key={index}
+                        className="rounded-3xl"
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0, transition: { duration: 0.5, delay: 0.3 * index } }}
+                     >
+                        {item}
+                     </motion.div>
+                  ))}
+               </div>
+            </div>
+         </div>
+      </CarouselContext.Provider>
+   )
+}
+
+export const CardProject = ({
+   project,
+   index,
+   layout = false,
+}: { project: Project; index: number; layout?: boolean }) => {
+   const [isOpen, setIsOpen] = useState(false)
+   const containerRef = useRef<HTMLDivElement>(null)
+   const cardRef = useRef<HTMLDivElement>(null)
+   useOutsideClick(containerRef, () => setIsOpen(false))
+   const handleCardClick = () => {
+      setIsOpen(true)
+      if (cardRef.current) {
+         cardRef.current.scrollIntoView({
+            behavior: "smooth",
+            block: "nearest",
+            inline: "center",
+         })
+      }
+   }
+   return (
+      <Fragment>
+         <motion.div
+            ref={cardRef}
+            layoutId={layout ? \`card-\${project.id}\` : undefined}
+            onClick={handleCardClick}
+            className="rounded-3xl cursor-pointer bg-gray-100 dark:bg-neutral-900 h-72 md:h-[30rem] w-[60vh] sm:w-[80vh] md:w-[90vh] lg:w-[100vh] overflow-hidden flex flex-col items-start justify-start relative z-10"
+         >
+            <div className="absolute h-full top-0 inset-x-0 bg-gradient-to-b from-black/50 via-transparent to-transparent z-30 pointer-events-none" />
+            <div className="relative z-40 p-8">
+               <motion.p
+                  layoutId={layout ? \`title-\${project.id}\` : undefined}
+                  className="text-white text-xl md:text-3xl font-semibold max-w-xs text-left font-sans mt-2"
+               >
+                  {project.title}
+               </motion.p>
+               <motion.p
+                  layoutId={layout ? \`description-\${project.id}\` : undefined}
+                  className="text-white text-sm md:text-base font-medium font-sans text-left mt-2"
+               >
+                  {project.description}
+               </motion.p>
+            </div>
+            <BlurImage src={project.image} alt={project.title} fill className="object-cover absolute z-10 inset-0" />
+         </motion.div>
+      </Fragment>
+   )
+}
+
+export const BlurImage = ({ height, width, src, className, alt, ...rest }: ImageProps) => {
+   const [isLoading, setLoading] = useState(true)
+   return (
+      <Image
+         className={cn("transition duration-300", isLoading ? "blur-sm" : "blur-0", className)}
+         onLoad={() => setLoading(false)}
+         src={src || "/placeholder.svg"}
+         width={width}
+         height={height}
+         loading="lazy"
+         decoding="async"
+         blurDataURL={typeof src === "string" ? src : undefined}
+         alt={alt ? alt : "Background of a beautiful view"}
+         {...rest}
+      />
+   )
+}
+`}>
+<CarouselCompForProject />
+</ComponentPreview>
+## Installation For other Carousels 
+<Stepper title="Carousel" description="Stunning carousel component for your projects.">
+   <StepperItem title={"Step 1 : Installation"}>
+      <CodeView language="bash"code={`npm i framer-motion clsx tailwind-merge @tabler/icons-react`} />
+      First install the Dependencies packages: 
+   <Note type="note" title="Note">
+      if you're Using React 19 you should use the following command:
+         <CodeView language="bash" code={`npm i framer-motion clsx tailwind-merge @tabler/icons-react --legacy-peer-deps`} />
+   </Note>
+   </StepperItem>
+   <StepperItem title="Step 2 : Create lib/utils.ts ">
+      Create a new file named `utils.ts` in the `lib` directory and add the following code:
+      <CodeView
+      language="tsx"
+      code={`import { ClassValue, clsx } from "clsx";
+import { twMerge } from "tailwind-merge";
+
+export function cn(...inputs: ClassValue[]) {
+return twMerge(clsx(inputs));
+}
+`}/>
+   </StepperItem>
+   <StepperItem title="Step 3 : Create BigCarousel.tsx Component">
+   You can put it in `components/BigCarousel.tsx` and add the following code:
+   <CodeView
+   language="tsx" 
+   code={`"use client";
+
+import { useOutsideClick } from "@/hooks/outSideClick";
+import { cn } from "@/lib/utils";
+import { IconArrowNarrowLeft, IconArrowNarrowRight } from "@tabler/icons-react";
+import { motion } from "framer-motion";
+import Image, { ImageProps } from "next/image";
+import { createContext, Fragment, JSX, useEffect, useRef, useState } from "react";
+
+interface CarouselProps {
+   items: JSX.Element[];
+   initialScroll?: number;
+   cardGap?: number;
+   scrollOffset?: number;
+   initialActiveIndex?: number;
+}
+
+interface Project {
+   id: number;
+   title: string;
+   description: string;
+   image: string;
+   link: string;
+}
+
+const CarouselContext = createContext<{
+   onCardClick: (index: number) => void;
+   currentIndex: number;
+}>({
+   onCardClick: () => { },
+   currentIndex: 0
+})
+
+export const CarouselProject = ({ items, initialScroll = 0, cardGap = 16, scrollOffset: initialScrollOffset, initialActiveIndex = 1 }: CarouselProps) => {
+   const [scrollOffset, setScrollOffset] = useState(950);
+   useEffect(() => {
+      const WidthWindow = window.innerWidth
+      if (WidthWindow < 640) {
+         setScrollOffset(260);
+      } else if (WidthWindow < 768) {
+         setScrollOffset(400);
+      } else if (WidthWindow < 1024) {
+         setScrollOffset(600);
+      } else if (WidthWindow < 1280) {
+         setScrollOffset(800);
+      } else {
+         setScrollOffset(950);
+      }
+   }, []);
+   const carouselRef = useRef<HTMLDivElement>(null)
+   const [canScrollLeft, setCanScrollLeft] = useState(false)
+   const [canScrollRight, setCanScrollRight] = useState(true)
+   const [currentIndex, setCurrentIndex] = useState(initialActiveIndex)
+   const checkScrollAbility = () => {
+      if (carouselRef.current) {
+         const { scrollLeft, scrollWidth, clientWidth } = carouselRef.current
+         setCanScrollLeft(scrollLeft > 0)
+         setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 10)
+      }
+   }
+   useEffect(() => {
+      if (carouselRef.current && initialActiveIndex !== undefined) {
+         const itemWidth = carouselRef.current.offsetWidth - 420
+         const scrollTo = itemWidth * initialActiveIndex;
+         carouselRef.current.scrollTo({
+            left: scrollTo,
+            behavior: 'smooth'
+         })
+      }
+   }, [initialActiveIndex])
+
+   const scroll = (direction: "left" | "right") => {
+      if (carouselRef.current) {
+         carouselRef.current.scrollBy({
+            left: direction === "left" ? -scrollOffset : scrollOffset,
+            behavior: "smooth"
+         })
+      }
+   }
+   const handleCarouselClick = (index: number) => {
+      setCurrentIndex(index)
+   };
+
+   return (
+      <CarouselContext.Provider value={{ onCardClick: handleCarouselClick, currentIndex }}>
+         <div className="relative w-full py-0 !my-12 ">
+            <div className="flex justify-end space-x-2">
+               <button className="relative z-40 h-12 w-12 rounded-full bg-gray-100 flex items-center justify-center disabled:opacity-50" onClick={() => scroll("left")} disabled={!canScrollLeft}>
+                  <IconArrowNarrowLeft className="h-7 w-7 text-gray-500" />
+               </button>
+               <button className="relative z-40 h-12 w-12 rounded-full bg-gray-100 flex items-center justify-center disabled:opacity-50" onClick={() => scroll("right")} disabled={!canScrollRight}>
+                  <IconArrowNarrowRight className="h-7 w-7 text-gray-500" />
+               </button>
+            </div>
+            <div className="flex w-full overflow-x-scroll py-6 scroll-smooth [scrollbar-width:none]" ref={carouselRef} onScroll={checkScrollAbility}>
+               <div className="flex flex-row justify-end gap-4 pl-4" style={{ gap: \`\${cardGap}px\` }}>
+                  {items.map((item, index) => (
+                     <motion.div key={index} className="rounded-3xl" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0, transition: { duration: 0.5, delay: 0.3 * index } }}>
+                        {item}
+                     </motion.div>
+                  ))}
+               </div>
+            </div>
+         </div>
+      </CarouselContext.Provider>
+   )
+}
+
+export const CardProject = ({ project, index, layout = false }: { project: Project; index: number; layout?: boolean }) => {
+   const [isOpen, setIsOpen] = useState(false)
+   const containerRef = useRef<HTMLDivElement>(null)
+   const cardRef = useRef<HTMLDivElement>(null)
+   useOutsideClick(containerRef, () => setIsOpen(false))
+   const handleCardClick = () => {
+      setIsOpen(true)
+      if (cardRef.current) {
+         cardRef.current.scrollIntoView({
+            behavior: "smooth",
+            block: "nearest",
+            inline: "center"
+         })
+      }
+   }
+   return (
+      <Fragment>
+         <motion.div
+            ref={cardRef}
+            layoutId={layout ? \`card-\${project.id}\` : undefined}
+            onClick={handleCardClick}
+            className="rounded-3xl cursor-pointer bg-gray-100 dark:bg-neutral-900 h-72 md:h-[33rem] w-[47vh] md:w-[90vh] lg:w-[110vh] xl:w-[150vh] overflow-hidden flex flex-col items-start justify-start relative z-10"
+         >
+            <div className="absolute h-full top-0 inset-x-0 bg-gradient-to-b from-black/50 via-transparent to-transparent z-30 pointer-events-none" />
+            <div className="relative z-40 p-8">
+               <motion.p
+                  layoutId={layout ? \`title-\${project.id}\` : undefined}
+                  className="text-white text-xl md:text-3xl font-semibold max-w-xs text-left font-sans mt-2"
+               >
+                  {project.title}
+               </motion.p>
+               <motion.p
+                  layoutId={layout ? \`description-\${project.id}\` : undefined}
+                  className="text-white text-sm md:text-base font-medium font-sans text-left mt-2"
+               >
+                  {project.description}
+               </motion.p>
+            </div>
+            <BlurImage
+               src={project.image}
+               alt={project.title}
+               fill
+               className="object-cover absolute z-10 inset-0"
+            />
+         </motion.div>
+      </Fragment>
+   )
+}
+
+export const BlurImage = ({
+   height,
+   width,
+   src,
+   className,
+   alt,
+   ...rest
+}: ImageProps) => {
+   const [isLoading, setLoading] = useState(true);
+   return (
+      <Image
+         className={cn(
+            "transition duration-300",
+            isLoading ? "blur-sm" : "blur-0",
+            className
+         )}
+         onLoad={() => setLoading(false)}
+         src={src || "/placeholder.svg"}
+         width={width}
+         height={height}
+         loading="lazy"
+         decoding="async"
+         blurDataURL={typeof src === "string" ? src : undefined}
+         alt={alt ? alt : "Background of a beautiful view"}
+         {...rest}
+      />
+   );
+};`} />
+   </StepperItem>
+   <StepperItem title="Step 4 : Create Index.tsx">
+      Create a new folder Called `Constant` in the `app` directory and create an `index.tsx` file and add the following object on it<br/> 
+      this object has the data of carousel items: 
+<CodeView 
+  language="tsx"
+  code={`export const projects = [
+  {
+    id: 1,
+    title: "E-commerce web app",
+    description: "An E-commerce web app for lighting store",
+    image: "/projects/project-1.png",
+    link: "https://project-1"
+  },
+  {
+    id: 2,
+    title: "Portfolio web app",
+    description: "Stunning portfolio using latest technologies & design trends",
+    image: "/projects/project-2.png",
+    link: "https://project-2"
+  },
+  {
+    id: 3,
+    title: "Social Media application",
+    description: "A Full social Media application for all users",
+    image: "/projects/project-3.png",
+    link: "https://project-3"
+  },
+];`} 
+/>
+  </StepperItem>
+   <StepperItem title="Step 5 : Create Another file to wrap the Carousel">
+   You can put it in `components/BigCarouselContainer.tsx` and add the following code:
+   <CodeView
+   language="tsx" 
+   code={`import { projects } from '@/app/constant';
+import Link from 'next/link';
+import { CardProject, CarouselProject } from './CarouselBigCard';
+
+const CarouselCompForProject = () => {
+   const projectCards = projects.map((project, index) => (
+      <Link href={project.link} key={project.id} className='not-prose'>
+         <CardProject project={project} index={index} />
+      </Link>
+   ));
+   return (
+      <CarouselProject items={projectCards} />
+   )
+}
+
+export default CarouselCompForProject
+   `} />
+   </StepperItem>
+</Stepper>

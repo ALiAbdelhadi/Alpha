@@ -1,0 +1,331 @@
+---
+title: Timeline
+description: Clearly visualize sequences of events, project milestones, and historical data with our flexible Timeline component.
+---
+
+## Preview
+
+<ComponentPreview id="timeline-preview"
+  code=
+  {
+`"use client";
+
+import { cn } from "@/lib/utils";
+import { TimeLineProps } from "@/types";
+import { motion, useScroll, useTransform, Variants } from "framer-motion";
+import { useEffect, useRef, useState } from "react";
+import Container from "./Container";
+
+
+const cardVariants: Variants = {
+   offscreen: {
+      y: 75,
+      opacity: 0,
+   },
+   onscreen: {
+      y: 0,
+      opacity: 1,
+      transition: {
+         duration: 0.4,
+      },
+   },
+};
+
+const pointVariants: Variants = {
+   offscreen: {
+      scale: 0,
+      opacity: 0,
+   },
+   onscreen: {
+      scale: 1.1,
+      opacity: 1,
+      transition: {
+         duration: 0.3,
+      },
+   },
+};
+
+const Timeline = ({ data }: { data: TimeLineProps[] }) => {
+   const ref = useRef<HTMLDivElement>(null);
+   const containerRef = useRef<HTMLDivElement>(null);
+   const [height, setHeight] = useState(0);
+
+   useEffect(() => {
+      const updateHeight = () => {
+         if (ref.current) {
+            const rect = ref.current.getBoundingClientRect();
+            setHeight(rect.height);
+         }
+      };
+
+      updateHeight();
+      window.addEventListener('resize', updateHeight);
+      return () => window.removeEventListener('resize', updateHeight);
+   }, []);
+
+   const { scrollYProgress } = useScroll({
+      target: containerRef,
+      offset: ["start 0%", "end 50%"],
+   });
+   const heightTransform = useTransform(scrollYProgress, [0, 1], [0, height]);
+   const opacityTransform = useTransform(scrollYProgress, [0, 0.1], [0, 1]);
+
+   return (
+      <div className="w-full my-24" ref={containerRef}>
+         <Container>
+            <div>
+               <h2 className="text-3xl md:text-4xl mb-4 text-center font-bold">
+                  How it works?
+               </h2>
+               <p className="text-muted-foreground text-center text-base md:text-lg">
+                  We work in a structured way. Here is how you will be onboard:
+               </p>
+            </div>
+            <div ref={ref} className="relative">
+               <div className="absolute my-4 left-4 md:left-1/2 top-0 h-full w-[3px] bg-neutral-200 md:-translate-x-1/2">
+                  <motion.div
+                     style={{
+                        height: heightTransform,
+                        opacity: opacityTransform,
+                     }}
+                     className="absolute inset-x-0 top-0 w-full bg-primary rounded-full"
+                  />
+               </div>
+               {data.map((item, index) => {
+                  const isEven = index % 2 !== 0;
+                  return (
+                     <motion.div
+                        key={index}
+                        initial="offscreen"
+                        whileInView="onscreen"
+                        viewport={{ once: true, amount: 0.6 }}
+                        className={cn("flex flex-col md:flex-row items-start mb-16 md:mb-24", isEven ? "md:flex-row-reverse" : "")}
+                     >
+                        <motion.div
+                           variants={pointVariants}
+                           className="absolute my-4 left-1.5 ml-[3px] lg:-ml-[8.5px] md:left-1/2 w-4 h-4 bg-primary rounded-full md:-translate-x-1/2"
+                        />
+                        <motion.div
+                           variants={cardVariants}
+                           className={cn("w-full md:w-5/12 pl-12 md:pl-0 md:h-[70vh] h-[50vh]", isEven ? "md:pl-8" : "md:pr-8")}
+                        >
+                           <h3 className="text-sm font-semibold text-primary">
+                              {item.title}
+                           </h3>
+                           <div>{item.content}</div>
+                        </motion.div>
+                     </motion.div>
+                  );
+               })}
+            </div>
+         </Container >
+      </div >
+   );
+
+};
+export default Timeline
+`
+}>
+<Timeline
+  data={[
+    {
+      title: "Step 1: Define Requirements",
+      content: "Identify the needs of your project and outline the necessary steps.",
+    },
+    {
+      title: "Step 2: Develop Timeline Component",
+      content: "Build the timeline using React and Framer Motion.",
+    },
+    {
+      title: "Step 3: Deploy and Review",
+      content: "Deploy your project and ensure the timeline works seamlessly.",
+    },
+  ]}
+/>
+</ComponentPreview>
+## Installation
+      To install the Timeline component, you can follow the steps below:
+<Stepper title="Timeline" description="Clearly visualize sequences of events, project milestones, and historical data with our flexible Timeline component.">
+  <StepperItem title={"Step 1 : Installation"}>
+  First install the Dependencies packages: 
+  <CodeView language="bash" code={`npm i framer-motion clsx tailwind-merge @tabler/icons-react`}/>
+   <Note type="note" title="Note">
+      if you're Using React 19 you should use the following command 
+   </Note>
+  <CodeView language="bash" code={`npm i framer-motion clsx tailwind-merge @tabler/icons-react --legacy-peer-deps `}/>
+  </StepperItem>
+  <StepperItem title="Step 2 : Create lib/utils.ts ">
+      Create a new file named `utils.ts` in the `lib` directory and add the following code:
+      <CodeView
+      language="tsx"
+      code={`import { ClassValue, clsx } from "clsx";
+import { twMerge } from "tailwind-merge";
+
+export function cn(...inputs: ClassValue[]) {
+return twMerge(clsx(inputs));
+}
+`}/>
+  </StepperItem>
+  <StepperItem title="Step : 3 Create components/Container.tsx">
+  This `Container.tsx` component can wrap you entire content and provide a max-width container and other of some css property, you can put in each file just like the `Timeline.tsx` Component.
+  <CodeView
+  language="tsx"
+  code={`import { cn } from "@/lib/utils"
+
+interface ContainerProps extends React.HTMLAttributes<HTMLDivElement> {
+    children: React.ReactNode
+}
+
+export default function Container({ children, className, ...props }: ContainerProps) {
+    return (
+        <div className={cn("container mx-auto w-full max-w-[1400px] px-4 sm:px-6 lg:px-8", className ?? '')} {...props}>
+            {children}
+        </div >
+    )
+}
+  `}/>
+  </StepperItem>
+  <StepperItem title="Step 4 : Create Timeline.tsx Component">
+      You can put it in `components/Timeline.tsx` and add the following code:
+      <CodeView
+      language="tsx"
+      code={`"use client"
+
+import { cn } from "@/lib/utils"
+import type { TimeLineProps } from "@/types"
+import { motion, useScroll, useTransform, type Variants } from "framer-motion"
+import { useEffect, useRef, useState } from "react"
+import Container from "./Container"
+
+const cardVariants: Variants = \{
+   offscreen: \{
+      y: 75,
+      opacity: 0,
+   },
+   onscreen: \{
+      y: 0,
+      opacity: 1,
+      transition: {
+         duration: 0.4,
+      },
+   },
+}
+
+const pointVariants: Variants = \{
+   offscreen: \{
+      scale: 0,
+      opacity: 0,
+   },
+   onscreen: \{
+      scale: 1.1,
+      opacity: 1,
+      transition: {
+         duration: 0.3,
+      },
+   },
+}
+
+const HowItWorksTimeLine = (\{ data }: \{ data: TimeLineProps[] }) => \{
+   const ref = useRef<HTMLDivElement>(null)
+   const containerRef = useRef<HTMLDivElement>(null)
+   const [height, setHeight] = useState(0)
+
+   useEffect(() => \{
+      const updateHeight = () => {
+         if (ref.current) {
+            const rect = ref.current.getBoundingClientRect()
+            setHeight(rect.height)
+         }
+      }
+      updateHeight()
+      window.addEventListener("resize", updateHeight)
+      return () => window.removeEventListener("resize", updateHeight)
+   }, [])
+
+   const { scrollYProgress } = useScroll(\{
+      target: containerRef,
+      offset: ["start 0%", "end 50%"],
+   })
+
+   const heightTransform = useTransform(scrollYProgress, [0, 1], [0, height])
+   const opacityTransform = useTransform(scrollYProgress, [0, 0.1], [0, 1])
+
+   return (
+      <div className="w-full my-12 sm:my-16 md:my-24" ref={containerRef}>
+         <Container>
+            <div className="mb-8 sm:mb-12 md:mb-16">
+               <h2 className="text-2xl sm:text-3xl md:text-4xl mb-2 sm:mb-4 text-center font-bold">How it works?</h2>
+               <p className="text-muted-foreground text-center text-sm sm:text-base md:text-lg">
+                  We work in a structured way. Here is how you will be onboard:
+               </p>
+            </div>
+            <div ref={ref} className="relative">
+               <div className="absolute my-4 left-4 md:left-1/2 top-0 h-full w-[3px] bg-neutral-200 md:-translate-x-1/2">
+                  <motion.div
+                     style={{
+                        height: heightTransform,
+                        opacity: opacityTransform,
+                     }}
+                     className="absolute inset-x-0 top-0 w-full bg-primary rounded-full"
+                  />
+               </div>
+               \{data.map((item, index) => \{
+                  const isEven = index % 2 !== 0
+                  return (
+                     <motion.div
+                        key={index}
+                        initial="offscreen"
+                        whileInView="onscreen"
+                        viewport={{ once: true, amount: 0.6 }}
+                        className={cn("flex flex-col md:flex-row items-start my-16 md:my-24", isEven ? "md:flex-row-reverse" : "")}
+                     >
+                        <motion.div
+                           variants={pointVariants}
+                           className="absolute my-4 left-1.5 sm:-ml-[8px] ml-[3px] md:left-1/2 w-4 h-4 bg-primary rounded-full md:-translate-x-1/2"
+                        />
+                        <motion.div
+                           variants={cardVariants}
+                           className={cn("w-full sm:w-5/12 pl-10 sm:pl-0 sm:h-auto mb-12 md:mb-20 lg:mb-24", isEven ? "sm:pl-8" : "sm:pr-8")}
+                        >
+                           <h3 className="text-xs sm:text-sm font-semibold text-primary mb-2">{item.title}</h3>
+                           <div>{item.content}</div>
+                        </motion.div>
+                     </motion.div>
+                  )
+               })}
+            </div>
+         </Container>
+      </div>
+   )
+}
+
+export default HowItWorksTimeLine `} />
+  </StepperItem>
+  <StepperItem title="Step 5 : Create types folder">
+  Create a new folder named `types` in the `root` of your project and create file in it named `index.d.ts` and add the following code:
+  <CodeView
+  language="ts"
+  code={`
+  declare type TimeLineProps = \{
+    title: string;
+    content: string; // optional you can use "ReactNode" instead of "string" if you want to use HTML tags not only text
+}`}  />
+  </StepperItem>
+</Stepper>
+You can also use the following object to create a timeline
+<CodeView language="tsx" code={`
+timeLineData : TimeLineProps[] = [
+   {
+      title: "Step 1: Define Requirements",
+      content: "Identify the needs of your project and outline the necessary steps.",
+   },
+   {
+      title: "Step 2: Develop Timeline Component",
+      content: "Build the timeline using React and Framer Motion.",
+   },
+   {
+      title: "Step 3: Deploy and Review",
+      content: "Deploy your project and ensure the timeline works seamlessly.",
+   },
+]
+`}  />

@@ -1,0 +1,38 @@
+---
+title: Note Component
+description: This section previews the Note component.
+---
+
+## Basic Usage
+
+<ComponentPreview
+  code={`<Note type="note" title="Note">
+  This is a general note to convey information to the user.
+</Note>`}
+>
+  <Note type="note" title="Note">
+    This is a general note to convey information to the user.
+  </Note>
+</ComponentPreview>
+
+## Multiple Types
+
+<ComponentPreview
+  code={`<Note type="danger" title="Danger">
+  This is a danger alert to notify the user of a critical issue.
+</Note>
+<Note type="warning" title="Warning">
+  This is a warning alert for issues that require attention.
+</Note>`}
+>
+  <Note type="danger" title="Danger">
+    This is a danger alert to notify the user of a critical issue.
+  </Note>
+  <Note type="warning" title="Warning">
+    This is a warning alert for issues that require attention.
+  </Note>
+</ComponentPreview>
+
+## Regular Content Without Preview
+
+Some explanatory text that doesn't need a preview or code tab. This will be rendered normally without tabs.
