@@ -1,11 +1,11 @@
 "use client"
 
 import { motion } from "framer-motion"
-import { ArrowUpRight, Book, Code, Link2, Puzzle, Settings, Terminal, Users, Zap } from "lucide-react"
-import CodeView from "./CodeView"
-import { Button } from "./ui/button"
+import { ArrowUpRight, Code, Puzzle, Settings, Terminal, Users, Zap } from "lucide-react"
 import Link from "next/link"
+import CodeView from "./CodeView"
 import { Badge } from "./ui/badge"
+import { Button } from "./ui/button"
 
 const ANIMATION_VARIANTS = {
    ANIMATION_VARIANTS: {
@@ -26,7 +26,7 @@ const BentoGrid = () => {
                initial="initial"
                animate="animate"
             >
-               <div className="flex flex-col lg:flex-row items-center justify-center gap-8 lg:gap-16 p-4  hover:translate-x-1 transition-transform">
+               <div className="flex flex-col lg:flex-row items-center justify-center gap-8 lg:gap-16 lg:p-4 p-0  hover:translate-x-1 transition-transform">
                   <div className="relative w-full lg:w-1/2">
                      <div className="backdrop-blur-lg bg-white/20 text-gray-100 p-4 sm:p-6 md:p-8 rounded-3xl">
                         <CodeView
@@ -47,7 +47,7 @@ const BentoGrid = () => {
 }`}
                         />
                      </div>
-                     <div className="absolute top-1/2 left-[11%] md:left-[25%] lg:left-1/2 lg:-translate-x-1/4 -translate-x-[10%] lg:-translate-y-1/4 translate-y-[28%] bg-gradient-to-r from-[rgba(245,245,247,0.1)] to-gray-700/30 backdrop-blur-lg w-[90%] md:w-[50%] lg:w-[65%] z-50 shadow-sm rounded-xl ml-0 lg:ml-32">
+                     <div className="absolute top-1/2 left-[10%] md:left-[25%] lg:left-1/2 lg:-translate-x-1/4 -translate-x-[10%] lg:-translate-y-1/4 translate-y-[28%] bg-gradient-to-r from-[rgba(245,245,247,0.1)] to-gray-700/30 backdrop-blur-lg w-[100%] md:w-[50%] lg:w-[65%] z-50 shadow-sm rounded-xl ml-0 lg:ml-32">
                         <div className="p-3 border-b border-gray-700">
                            <input
                               type="text"
@@ -72,7 +72,7 @@ const BentoGrid = () => {
                      </div>
                   </div>
                   <div className="space-y-4 text-center lg:text-left w-full lg:w-1/2 lg:ml-20 ml-0 md:mt-0 mt-6">
-                     <h2 className="text-xl md:text-2xl lg:text-3xl font-bold text-white">
+                     <h2 className="text-lg md:text-2xl lg:text-3xl font-bold text-white">
                         Build what you&apos;ve always wanted
                      </h2>
                      <p className="text-base md:text-lg text-purple-200">
@@ -233,22 +233,22 @@ const BentoGrid = () => {
                   <div className="inline-flex h-12 w-12 items-center justify-center rounded-lg bg-secondary">
                      <Zap className="h-6 w-6 text-secondary-foreground" />
                   </div>
-                  <h3 className="text-xl font-semibold text-card-foreground">Boost Your Productivity</h3> {/* More benefit-oriented title */}
+                  <h3 className="text-xl font-semibold text-card-foreground">Boost Your Productivity</h3>
                   <p className="text-sm text-muted-foreground">
                      Save valuable development time and resources by leveraging our pre-built components.  Focus on what matters most – building exceptional user experiences – while we handle the foundational elements.
                   </p>
                   <div className="grid grid-cols-3 gap-4 pt-4">
-                     <div className="rounded-lg bg-secondary p-4">
-                        <p className="text-2xl font-bold text-secondary-foreground">Up to 50%</p> {/* Example time savings */}
-                        <p className="text-xs text-muted-foreground">Faster Development</p> {/* Clearer label */}
+                     <div className="rounded-lg bg-secondary p-2 lg:p-4">
+                        <p className="text-sm sm:text-base md:text-lg lg:text-2xl font-bold text-secondary-foreground">Up to 50%</p>
+                        <p className="text-xs text-muted-foreground">Faster Development</p>
                      </div>
-                     <div className="rounded-lg bg-secondary p-4">
-                        <p className="text-2xl font-bold text-secondary-foreground">Weeks</p> {/* Unit of time saved */}
-                        <p className="text-xs text-muted-foreground">Saved on Initial Setup</p> {/* More specific benefit */}
+                     <div className="rounded-lg bg-secondary p-2 lg:p-4">
+                        <p className="text-sm sm:text-base md:text-lg lg:text-2xl font-bold text-secondary-foreground">Weeks</p>
+                        <p className="text-xs text-muted-foreground">Saved on Initial Setup</p>
                      </div>
-                     <div className="rounded-lg bg-secondary p-4">
-                        <p className="text-2xl font-bold text-secondary-foreground">Reduced</p>  {/* More appropriate word */}
-                        <p className="text-xs text-muted-foreground">Maintenance Overhead</p> {/* Benefit related to maintenance */}
+                     <div className="rounded-lg bg-secondary p-2 lg:p-4">
+                        <p className="text-sm sm:text-base md:text-lg lg:text-2xl font-bold text-secondary-foreground">Reduced</p>
+                        <p className="text-xs text-muted-foreground">Maintenance Overhead</p>
                      </div>
                   </div>
                </div>

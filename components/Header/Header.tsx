@@ -38,7 +38,7 @@ export default function Header() {
             )}
         >
             <Container className="flex items-center justify-between h-full">
-                <div className="flex items-center space-x-6 -ml-3">
+                <div className="flex items-center space-x-6">
                     <Logo showIcon={true} showLogoText={true} />
                     <nav
                         className={cn("hidden lg:flex items-center", {
@@ -102,7 +102,7 @@ export default function Header() {
                         </NavigationMenu>
                     </nav>
                 </div>
-                <div className="flex items-center space-x-4 -mr-[8px] ">
+                <div className="flex items-center space-x-4">
                     <Search />
                     <div className="hidden lg:flex items-center space-x-4">
                         <Button variant="outline">Sign In</Button>
