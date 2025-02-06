@@ -18,7 +18,7 @@ export default async function DocsPage(props: DocsPageProps) {
         <div className="pb-4">
           <DocsBreadcrumb paths={slug} />
         </div>
-        <section className="flex-grow">
+        <section className="flex-grow md:mt-3 mt-7">
           <Typography>
             <h1 className="text-3xl !-mt-0.5">{res.frontmatter.title}</h1>
             {res.frontmatter.description && (

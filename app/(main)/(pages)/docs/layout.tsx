@@ -17,7 +17,7 @@ const DocsLayout = ({ children }: { children: ReactNode }) => {
           </ScrollArea>
         </aside>
         {/* Main Content Area */}
-        <main className="flex-[5.25] min-w-0 overflow-y-auto hide-scrollbar p-6 h-screen">
+        <main className="flex-[5.25] min-w-0 overflow-y-auto hide-scrollbar py-6 h-screen">
           {children}
         </main>
       </div>
