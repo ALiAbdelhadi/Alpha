@@ -1,6 +1,5 @@
 import CodeView from "@/components/CodeView";
 import ComponentPreview from "@/components/ComponentView";
-import Image from "@/components/image";
 import Link from "@/components/link";
 import CodeBlock from "@/components/markdown/CodeBlock";
 import NoteMarkdown from "@/components/markdown/NoteMarkdown";
@@ -20,7 +19,6 @@ export const components = {
    CodeView,
    Stepper,
    StepperItem,
-   img: Image,
    a: Link,
    Badge,
    NoteMarkdown,
