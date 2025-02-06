@@ -9,7 +9,7 @@ export default function DocsPaginationPage({ pathname }: { pathname: string }) {
       <div className="w-full sm:w-1/2">
         {res.prev && (
           <Link
-            className="w-full  border-none flex flex-col pl-3 !py-4 !items-start font-medium not-prose"
+            className="w-full  border-none flex flex-col  !py-4 !items-start font-medium not-prose"
             href={`/docs${res.prev.href}`}
           >
             <div>
@@ -27,7 +27,7 @@ export default function DocsPaginationPage({ pathname }: { pathname: string }) {
       <div className="w-full sm:w-1/2 flex justify-end">
         {res.next && (
           <Link
-            className="w-full border-none flex flex-col pr-3 !py-4 !items-end text-right font-medium not-prose"
+            className="w-full border-none flex flex-col !py-4 !items-end text-right font-medium not-prose"
             href={`/docs${res.next.href}`}
           >
             <span className=" text-muted-foreground text-xs sm:text-[13px]">

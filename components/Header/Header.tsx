@@ -34,7 +34,7 @@ export default function Header() {
     return (
         <header
             className={cn(
-                "sticky z-50 h-16 inset-[0%_0%_auto] top-0 w-full bg-white/40 backdrop-blur-lg backdrop-filter backdrop-saturate-[180%] transition-all duration-300",
+                "sticky z-50 h-16 inset-[0%_0%_auto] top-0 w-full bg-white/40 backdrop-blur-lg backdrop-filter backdrop-saturate-[200%] supports-[backdrop-filter]:bg-white/30 transition-all duration-300 ease-in-out",
             )}
         >
             <Container className="flex items-center justify-between h-full">

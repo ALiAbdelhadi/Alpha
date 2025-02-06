@@ -1,5 +1,6 @@
 import { buttonVariants } from "@/components/ui/button";
-import Link from "next/link";
+
+import Link from "@/components/link";
 
 export default function NotFound() {
   return (

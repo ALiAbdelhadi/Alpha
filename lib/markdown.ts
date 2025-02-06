@@ -1,3 +1,4 @@
+import { BaseMdxFrontmatter, BlogMdxFrontmatter } from "@/types";
 import { promises as fs } from "fs";
 import matter from "gray-matter";
 import { compileMDX } from "next-mdx-remote/rsc";
@@ -8,45 +9,17 @@ import rehypePrism from "rehype-prism-plus";
 import rehypeSlug from "rehype-slug";
 import remarkGfm from "remark-gfm";
 import { visit } from "unist-util-visit";
+import { components } from "./components";
 import { page_routes, ROUTES } from "./routes-config";
-// custom components imports
-import CodeView from "@/components/CodeView";
-import ComponentPreview from "@/components/ComponentView";
-import CarouselCompForProject from "@/components/markdown/Carousel/CarouselBigContainer";
-import CarouselContainer from "@/components/markdown/Carousel/CarouselContainer";
-import CodeBlock from "@/components/markdown/CodeBlock";
-import Image from "@/components/markdown/image";
-import Link from "@/components/markdown/link";
-import Note from "@/components/markdown/note";
-import Outlet from "@/components/markdown/outlet";
-import { Stepper, StepperItem } from "@/components/markdown/stepper";
-import Timeline from "@/components/markdown/TimeLine";
-import { Badge } from "@/components/ui/badge";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-
-// add custom components
-const components = {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-  Note,
-  CodeBlock,
-  ComponentPreview,
-  CodeView,
-  Stepper,
-  StepperItem,
-  img: Image,
-  a: Link,
-  Outlet,
-  Badge,
-  Timeline,
-  CarouselCompForProject,
-  CarouselContainer,
-};
 
 // can be used for other pages like blogs, Guides etc
-async function parseMdx<Frontmatter>(rawMdx: string) {
+interface MdxFrontmatter {
+  title: string
+  description?: string
+  [key: string]: any
+}
+
+export async function parseMdx<Frontmatter = MdxFrontmatter>(rawMdx: string) {
   return await compileMDX<Frontmatter>({
     source: rawMdx,
     options: {
@@ -57,23 +30,25 @@ async function parseMdx<Frontmatter>(rawMdx: string) {
           rehypeCodeTitles,
           rehypePrism,
           rehypeSlug,
-          rehypeAutolinkHeadings,
-          postProcess,
+          [
+            rehypeAutolinkHeadings,
+            {
+              properties: {
+                className: ['subheading-anchor'],
+                ariaLabel: 'Link to section'
+              }
+            }
+          ],
+          postProcess
         ],
-        remarkPlugins: [remarkGfm],
-      },
+        remarkPlugins: [remarkGfm]
+      }
     },
-    components,
-  });
+    components
+  })
 }
 
 // logic for docs
-
-export type BaseMdxFrontmatter = {
-  title: string;
-  description: string;
-};
-
 export async function getDocsForSlug(slug: string) {
   try {
     const contentPath = getDocsContentPath(slug);
@@ -83,11 +58,10 @@ export async function getDocsForSlug(slug: string) {
     console.log(err);
   }
 }
-
+// Tocs Section for docs page
 export async function getDocsTocs(slug: string) {
   const contentPath = getDocsContentPath(slug);
   const rawMdx = await fs.readFile(contentPath, "utf-8");
-  // captures between ## - #### can modify accordingly
   const headingsRegex = /^(#{2,4})\s(.+)$/gm;
   let match;
   const extractedHeadings = [];
@@ -166,7 +140,6 @@ const preProcess = () => (tree: any) => {
     }
   });
 };
-
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const postProcess = () => (tree: any) => {
   visit(tree, "element", (node) => {
@@ -174,19 +147,6 @@ const postProcess = () => (tree: any) => {
       node.properties["raw"] = node.raw;
     }
   });
-};
-
-export type Author = {
-  avatar?: string;
-  handle: string;
-  username: string;
-  handleUrl: string;
-};
-
-export type BlogMdxFrontmatter = BaseMdxFrontmatter & {
-  date: string;
-  authors: Author[];
-  cover: string;
 };
 
 export async function getAllBlogStaticPaths() {
@@ -224,5 +184,46 @@ export async function getBlogForSlug(slug: string) {
     return await parseMdx<BlogMdxFrontmatter>(rawMdx);
   } catch {
     return undefined;
+  }
+}
+
+// Blocks
+export async function GetBlocksForSlug(slug: string) {
+  try {
+    const contentPath = GetBlocksContentPath(slug);
+    const rawMdx = await fs.readFile(contentPath, "utf-8");
+    return await parseMdx<BaseMdxFrontmatter>(rawMdx);
+  } catch (err) {
+    console.log(err);
+  }
+}
+function GetBlocksContentPath(slug: string) {
+  return path.join(process.cwd(), "/contents/blocks/", `${slug}/index.mdx`);
+}
+export async function GetAllBlocks() {
+  const blogFolder = path.join(process.cwd(), "/contents/blocks/");
+  const files = await fs.readdir(blogFolder);
+  const uncheckedRes = await Promise.all(
+    files.map(async (file) => {
+      if (!file.endsWith(".mdx")) return undefined;
+      const filepath = path.join(process.cwd(), `/contents/blocks/${file}`);
+      const rawMdx = await fs.readFile(filepath, "utf-8");
+      return {
+        ...justGetFrontmatterFromMD<BlogMdxFrontmatter>(rawMdx),
+        slug: file.split(".")[0],
+      };
+    }),
+  );
+  return uncheckedRes.filter((it) => !!it) as (BlogMdxFrontmatter & {
+    slug: string;
+  })[];
+}
+export async function GetAllBlocksStaticPaths() {
+  try {
+    const blogFolder = path.join(process.cwd(), "/contents/blogs/");
+    const res = await fs.readdir(blogFolder);
+    return res.map((file) => file.split(".")[0]);
+  } catch (err) {
+    console.log(err);
   }
 }

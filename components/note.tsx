@@ -1,11 +1,6 @@
 import { cn } from "@/lib/utils";
+import { NoteProps } from "@/types";
 import clsx from "clsx";
-import { PropsWithChildren } from "react";
-
-type NoteProps = PropsWithChildren & {
-  title?: string;
-  type?: "note" | "danger" | "warning" | "success";
-};
 
 export default function Note({
   children,
@@ -24,11 +19,12 @@ export default function Note({
   return (
     <div
       className={cn(
-        "border rounded-md px-5 pb-6 mt-5 mb-7 text-sm tracking-wide",
+        "border rounded-lg px-6 py-5 text-sm tracking-wide space-y-4",
         noteClassNames
       )}
     >
-      <p className="font-bold -mb-3">{title}:</p> {children}
+      <p className="font-bold -mb-3 text-foreground text-base ">{title}:</p>
+      <div>{children}</div>
     </div>
   );
 }

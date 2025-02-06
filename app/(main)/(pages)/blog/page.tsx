@@ -1,9 +1,10 @@
 import Container from "@/components/Container";
+import Link from "@/components/link";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Author, BlogMdxFrontmatter, getAllBlogs } from "@/lib/markdown";
+import { getAllBlogs } from "@/lib/markdown";
 import { formatDate2, stringToDate } from "@/lib/utils";
+import { Author, BlogMdxFrontmatter } from "@/types";
 import Image from "next/image";
-import Link from "next/link";
 export default async function BlogIndexPage() {
   const blogs = (await getAllBlogs()).sort(
     (a, b) => stringToDate(b.date).getTime() - stringToDate(a.date).getTime()

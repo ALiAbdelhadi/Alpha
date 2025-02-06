@@ -22,13 +22,17 @@ export default function Search() {
 
   // Detect platform (macOS or Windows)
   useEffect(() => {
-    const platform = navigator.platform.toLowerCase();
-    if (platform.includes("mac")) {
-      setPlatform("mac");
-    } else if (platform.includes("win")) {
-      setPlatform("windows");
+    const DetectPlatform = () => {
+      const platform = navigator.platform.toLowerCase()
+      const userAgent = navigator.userAgent.toLowerCase()
+      if (platform.includes("mac") || userAgent.includes("mac")) {
+        setPlatform("mac")
+      } else if (platform.includes("win") || userAgent.includes("win")) {
+        setPlatform("windows")
+      }
     }
-  }, []);
+    DetectPlatform();
+  }, [])
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if ((event.ctrlKey || event.metaKey) && event.key === "k") {

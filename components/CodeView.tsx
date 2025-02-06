@@ -9,7 +9,7 @@ interface ComponentPreviewProps {
 
 export default function CodeView({ code, language }: ComponentPreviewProps) {
    return (
-      <CodeBlock raw={code} className={`language-${language}`}>
+      <CodeBlock raw={code} className={`language-${language} my-5`}>
          {code}
       </CodeBlock >
    )

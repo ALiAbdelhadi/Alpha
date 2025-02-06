@@ -144,7 +144,6 @@ button {
     /* Chrome, Safari and Opera */
   }
 }
-
 @layer utilities {
   .custom-scrollbar {
     scrollbar-width: thin;

@@ -56,25 +56,27 @@ export default function ComponentPreview({ children, code, className, id }: Comp
                Code
             </TabsTrigger>
          </TabsList>
-         <TabsContent value="preview" className={cn("border rounded-xl", className)}>
-            <div className="overflow-hidden" id={id}>
-               <div className="py-2 px-4 bg-gray-100 dark:bg-gray-800 rounded-t-xl flex justify-end items-center">
-                  <button
-                     className="p-1.5 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors duration-200"
-                     onClick={toggleFullScreen}
-                     aria-label={isFullScreen ? "Exit full screen" : "Enter full screen"}
-                  >
-                     {isFullScreen ? <Minimize2 size={20} /> : <Maximize2 size={20} />}
-                  </button>
+         <div className="not-prose">
+            <TabsContent value="preview" className={cn("border rounded-xl", className)}>
+               <div className="overflow-hidden " id={id} >
+                  <div className="py-2 px-4 bg-gray-100 dark:bg-gray-800 rounded-t-xl flex justify-end items-center">
+                     <button
+                        className="p-1.5 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors duration-200"
+                        onClick={toggleFullScreen}
+                        aria-label={isFullScreen ? "Exit full screen" : "Enter full screen"}
+                     >
+                        {isFullScreen ? <Minimize2 size={20} /> : <Maximize2 size={20} />}
+                     </button>
+                  </div>
+                  <div className="p-4">{children}</div>
                </div>
-               <div className="p-4">{children}</div>
-            </div>
-         </TabsContent>
-         <TabsContent value="code" className="rounded-xl">
-            <CodeBlock raw={code} className="language-tsx">
-               {code}
-            </CodeBlock>
-         </TabsContent>
+            </TabsContent>
+            <TabsContent value="code" className="rounded-xl">
+               <CodeBlock raw={code} className="language-tsx">
+                  {code}
+               </CodeBlock>
+            </TabsContent>
+         </div>
       </Tabs>
    )
 }

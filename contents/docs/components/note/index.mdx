@@ -6,31 +6,35 @@ description: This section previews the Note component.
 ## Basic Usage
 
 <ComponentPreview
-  code={`<Note type="note" title="Note">
-  This is a general note to convey information to the user.
-</Note>`}
+  code={`
+  <Note type="note" title="Note">
+      This is a general note to convey information to the user.
+  </Note>
+  `}
 >
   <Note type="note" title="Note">
-    This is a general note to convey information to the user.
+      This is a general note to convey information to the user.
   </Note>
 </ComponentPreview>
-
 ## Multiple Types
 
 <ComponentPreview
-  code={`<Note type="danger" title="Danger">
-  This is a danger alert to notify the user of a critical issue.
-</Note>
-<Note type="warning" title="Warning">
-  This is a warning alert for issues that require attention.
-</Note>`}
+  code={`
+  <Note type="danger" title="Danger">
+      This is a danger alert to notify the user of a critical issue.
+  </Note>
+  <Note type="warning" title="Warning">
+      This is a warning alert for issues that require attention.
+  </Note>`}
 >
+<div className="space-y-4">
   <Note type="danger" title="Danger">
     This is a danger alert to notify the user of a critical issue.
   </Note>
   <Note type="warning" title="Warning">
     This is a warning alert for issues that require attention.
   </Note>
+</div>
 </ComponentPreview>
 
 ## Regular Content Without Preview

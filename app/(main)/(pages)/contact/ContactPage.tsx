@@ -1,10 +1,10 @@
 "use client";
 
 import Container from "@/components/Container";
+import Link from "@/components/link";
 import { WorldMap } from "@/components/WorldMap";
 import { Phone } from 'lucide-react';
 import Image from "next/image";
-import Link from "next/link";
 
 export default function ContactPage() {
     return (

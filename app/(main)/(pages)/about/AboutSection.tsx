@@ -6,7 +6,7 @@ import { Card } from "@/components/ui/card";
 import { cn } from '@/lib/utils';
 import { Asterisk, MoveRight, Quote } from 'lucide-react';
 import Image from "next/image";
-import Link from "next/link";
+import Link from "@/components/link";
 import { Fragment, useState } from "react";
 import { GoArrowDown } from "react-icons/go";
 export default function AboutSection() {

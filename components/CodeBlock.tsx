@@ -40,7 +40,7 @@ export default function CodeBlock({
   }, [children]);
   const language = className?.split('-')[1] || 'typescript';
   return (
-    <div className="relative group bg-[#1E1E1E] rounded-[6px] custom-scrollbar">
+    <div className="relative group bg-[#1E1E1E] rounded-[6px] custom-scrollbar my-5">
       <div className="absolute top-0 right-3">
         <div className="flex items-center space-x-2">
           <CopyButton content={raw || ""} />
@@ -56,7 +56,7 @@ export default function CodeBlock({
           </div>
         </div>
       </div>
-      <pre className={`${className} p-4 m-0 overflow-x-auto max-h-[650px] `}>
+      <pre className={`${className} overflow-x-auto max-h-[650px] hide-scrollbar `}>
         <code className={cn("font-code", className)}>{children}</code>
       </pre>
     </div>

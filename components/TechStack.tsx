@@ -4,6 +4,7 @@ import Image from "next/image";
 import { ReactNode } from "react";
 import Container from "./Container";
 import { Separator } from "./ui/separator";
+import Note from "./note";
 
 const TechStack = () => {
     return (
@@ -79,6 +80,9 @@ const TechStack = () => {
                         icon={<GitBranch className="w-6 h-6 text-gray-700" />}
                     />
                 </div>
+                <Note title="Note" type="note">
+                    we have created a new payment
+                </Note>
             </Container>
         </section>
     );
