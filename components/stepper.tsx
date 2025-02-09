@@ -16,7 +16,7 @@ export function Stepper({ children }: PropsWithChildren) {
               })
             )}
           >
-            <div className="bg-muted w-8 h-8 text-xs font-medium rounded-md border flex items-center justify-center absolute -left-4 font-code">
+            <div className="bg-muted w-8 h-8 text-[13px] font-medium rounded-md border flex items-center justify-center absolute -left-4 font-code">
               {index + 1}
             </div>
             {child}

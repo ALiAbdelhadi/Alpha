@@ -22,14 +22,14 @@ export const servicesLinks: servicesLinksProps[] = [
         href: "/services/mvp",
     },
 ];
-
 export const navItems: LinkItems[] = [
     { title: "Docs", href: "/docs/getting-started" },
-    { title: "Components", href: "/docs/components" },
-    { title: "Blocks", href: "/blocks" },
     { title: "Blog", href: "/blog" },
-    { title: "Contact", href: "/contact" }
+    { title: "FAQs", href: "/faqs" },
+    { title: "About", href: "/about" },
+    { title: "Contact", href: "/contact" },
 ];
+
 export const FooterItemsCompany: LinkItems[] = [
     { title: "FAQs", href: "/faqs" },
     { title: "About", href: "/about" },

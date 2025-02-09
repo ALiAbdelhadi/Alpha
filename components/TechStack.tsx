@@ -80,9 +80,6 @@ const TechStack = () => {
                         icon={<GitBranch className="w-6 h-6 text-gray-700" />}
                     />
                 </div>
-                <Note title="Note" type="note">
-                    we have created a new payment
-                </Note>
             </Container>
         </section>
     );

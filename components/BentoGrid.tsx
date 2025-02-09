@@ -13,7 +13,6 @@ import Link from "next/link";
 import { HiMiniArrowTurnDownLeft } from "react-icons/hi2";
 import CodeView from "./CodeView";
 import { Badge } from "./ui/badge";
-import { Separator } from "./ui/separator";
 
 const ANIMATION_VARIANTS = {
    ANIMATION_VARIANTS: {
@@ -38,8 +37,8 @@ const BentoGrid = () => {
                   <div className="relative w-full lg:w-1/2">
                      <div className="backdrop-blur-lg bg-white/20 text-gray-100 p-4 sm:p-6 md:p-8 rounded-3xl">
                         <CodeView
-                           language="js"
-                           code={`function Actions(props: { pullRequest: PullRequest }) {
+                           code={`
+function Actions(props: { pullRequest: PullRequest }) {
   return (
     <ActionPanel title={props.pullRequest.id}>
       <ActionPanel.Section>
@@ -52,8 +51,7 @@ const BentoGrid = () => {
       </ActionPanel.Section>
     </ActionPanel>
   );
-}`}
-                        />
+}`} language={"js"} />
                      </div>
                      <div className="absolute top-1/2 left-[10%] md:left-[25%] lg:left-1/2 lg:-translate-x-1/4 -translate-x-[10%] lg:-translate-y-1/4 translate-y-[28%] bg-gradient-to-r from-[rgba(245,245,247,0.1)] to-gray-700/30 backdrop-blur-lg w-[100%] md:w-[50%] lg:w-[65%] z-50 shadow-sm rounded-xl ml-0 lg:ml-32">
                         <div className="p-3 border-b border-gray-700">

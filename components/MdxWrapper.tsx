@@ -2,7 +2,7 @@ import { ReactNode } from 'react'
 
 const MdxWrapper = ({ children }: { children: ReactNode }) => {
    return (
-      <div className='not-prose'>
+      <div>
          {children}
       </div>
    )

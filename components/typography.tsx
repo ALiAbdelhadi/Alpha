@@ -5,10 +5,10 @@ export function Typography({ children }: PropsWithChildren) {
     <div className="prose prose-zinc dark:prose-invert
       max-w-none w-full
       prose-headings:scroll-m-20 prose-headings:font-semibold
-      prose-h2:text-2xl prose-h2:mt-10 prose-h2:mb-4
+      prose-h2:text-2xl prose-h2:mt-10 prose-h2:mb-4 prose-h4:m-0
       prose-p:text-base
       prose-a:text-primary hover:prose-a:text-primary/80
-      prose-code:px-1.5 prose-code:py-0.5 prose-code:font-medium
+      prose-code:px-2.5 prose-code:py-[3px] prose-code:font-medium
       prose-code:text-sm prose-code:bg-gray-100
       prose-code:rounded-md prose-code:before:content-none prose-code:after:content-none
       prose-pre:bg-stone-100 prose-img:my-0

@@ -22,5 +22,5 @@ export const components = {
    a: Link,
    Badge,
    NoteMarkdown,
-   MdxWrapper
+   MdxWrapper,
 };

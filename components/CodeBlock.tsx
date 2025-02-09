@@ -1,14 +1,18 @@
 "use client"
 import { cn } from "@/lib/utils";
-import { Check, Clipboard } from "lucide-react";
+import { languageIcons } from "@/settings/LanguageIcon";
+import { Check, Clipboard, FileCode } from "lucide-react";
 import Prism from 'prismjs';
 import 'prismjs/components/prism-javascript';
 import 'prismjs/components/prism-jsx';
 import 'prismjs/components/prism-tsx';
 import 'prismjs/components/prism-typescript';
+import 'prismjs/plugins/line-numbers/prism-line-numbers';
+import 'prismjs/plugins/line-numbers/prism-line-numbers.css';
 import { ComponentProps, useEffect, useState } from "react";
+
 const CopyButton = ({ content }: { content: string }) => {
-  const [copied, setCopied] = useState(false); 3
+  const [copied, setCopied] = useState(false);
   const copyToClipboard = async () => {
     await navigator.clipboard.writeText(content);
     setCopied(true);
@@ -29,6 +33,7 @@ const CopyButton = ({ content }: { content: string }) => {
   );
 };
 
+
 export default function CodeBlock({
   children,
   raw,
@@ -38,16 +43,19 @@ export default function CodeBlock({
   useEffect(() => {
     Prism.highlightAll();
   }, [children]);
+
   const language = className?.split('-')[1] || 'typescript';
+  const code = typeof children === "string" ? children.trim() : "";
+
   return (
     <div className="relative group bg-[#1E1E1E] rounded-[6px] custom-scrollbar my-5">
       <div className="absolute top-0 right-3">
         <div className="flex items-center space-x-2">
-          <CopyButton content={raw || ""} />
-          <span className="text-xs text-gray-100 uppercase">{language}</span>
+          <CopyButton content={raw || code} />
+          {languageIcons[language] || <FileCode className="w-4 h-4 text-gray-400" />}
         </div>
       </div>
-      <div className="rounded-[6px_6px_0_0] overflow-hidden bg-[#1E1E1E] ">
+      <div className="rounded-[6px_6px_0_0] overflow-hidden bg-[#1E1E1E]">
         <div className="flex items-center justify-between px-4 py-3 bg-[#2D2D2D]">
           <div className="flex space-x-2">
             <div className="w-3 h-3 rounded-full bg-red-500/30 border border-red-500/40" />
@@ -56,8 +64,8 @@ export default function CodeBlock({
           </div>
         </div>
       </div>
-      <pre className={`${className} overflow-x-auto max-h-[650px] hide-scrollbar `}>
-        <code className={cn("font-code", className)}>{children}</code>
+      <pre className={`${className} overflow-x-auto max-h-[650px] hide-scrollbar line-numbers`}>
+        <code className={cn("language-" + language, className)}>{code}</code>
       </pre>
     </div>
   );
