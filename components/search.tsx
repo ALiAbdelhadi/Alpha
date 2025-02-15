@@ -60,27 +60,19 @@ export default function Search() {
         }}
       >
         <DialogTrigger asChild>
-          <div className="relative flex items-center w-full cursor-pointer">
-            <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 " />
-            <input
-              className="sm:w-full w-[80%] bg-transparent md:bg-gray-100 border-none outline-none h-9 pl-10 pr-0 md:pr-3 text-sm overflow-ellipsis rounded-md cursor-pointer"
-              placeholder={"Search docs..."}
-              type="search"
-              readOnly
-            />
-            {/* Change Command/Control Icon Based on Platform */}
-            <div className="hidden sm:flex absolute top-1/2 -translate-y-1/2 right-2 text-xs font-mono items-center gap-0.5 md:dark:bg-stone-900 md:bg-[#ffffff] text-[#3f3f3f] p-1 rounded-sm font-semibold">
-              {platform === "mac" ? (
-                <>
-                  <CommandIcon className="w-3 h-3" />
-                  <span>K</span>
-                </>
-              ) : (
-                <>
-                  <span>Ctrl K</span>
-                </>
-              )}
-            </div>
+          <div>
+            <span className="lg:hidden flex items-center cursor-pointer">
+              <SearchIcon className="h-5 w-5 text-gray-950" />
+            </span>
+            <button className="group hidden lg:flex w-full items-center gap-2 rounded-md bg-stone-100 px-3 py-2 text-left text-sm shadow-sm transition-colors">
+              <SearchIcon className="h-5 w-5 text-gray-950 hidden lg:flex" />
+              {/* <span className="w-full whitespace-normal overflow-hidden text-ellipsis flex-1">Search docs...</span> */}
+              <span className="flex-1 hidden xl:flex text-gray-500">Search documentation...</span>
+              <span className="flex-1 hidden lg:flex xl:hidden text-gray-500">Search docs...</span>
+              <kbd className="hidden rounded bg-gray-200 p-1 text-xs text-gray-500 dark:bg-neutral-800 sm:inline-block font-semibold">
+                {platform === "mac" ? "⌘ K" : "Ctrl K"}
+              </kbd>
+            </button>
           </div>
         </DialogTrigger>
         <DialogContent aria-labelledby="search-dialog-title" className="p-0 w-full max-w-lg sm:max-w-2xl top-[34%] md:top-[45%] !rounded-md">

@@ -30,7 +30,7 @@ declare type Service = {
     iconColor: string
     link: string
     description: string;
-    showTags: boolean
+    showTags: boolean;
 }
 
 declare type Faqs = {

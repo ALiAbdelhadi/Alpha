@@ -42,7 +42,7 @@ const Landing = () => {
         <Fragment>
             <div
                 ref={mainRef}
-                className="relative flex min-h-screen items-center justify-center overflow-hidden transition-colors duration-300 top-0"
+                className="relative flex min-h-[86.5vh] py-8 items-center justify-center overflow-hidden transition-colors duration-300  "
             >
                 {/* Fixed gradient background */}
                 <div className="absolute inset-0 bg-gradient-to-b from-[#02F4EE] from-0%  via-primary/5  to-white via-45%  transition-colors duration-700">
