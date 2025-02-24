@@ -14,16 +14,6 @@ export const ROUTES: EachRoute[] = [
           { title: "Installation", href: "/installation" },
         ],
       },
-      {
-        title: "Components",
-        href: "/components",
-        items: [
-          { title: "Stepper", href: "/stepper" },
-          { title: "Note", href: "/note" },
-          { title: "Code Block", href: "/code-block" },
-        ],
-      },
-      { title: "Themes", href: "/themes" },
     ],
   },
 ];

@@ -13,7 +13,7 @@ export default async function BlogIndexPage() {
     <Container>
       <div className="w-full flex flex-col gap-1 sm:min-h-[91vh] min-h-[88vh] pt-2 ">
         <div className="mb-7 flex flex-col gap-2">
-          <h1 className="text-4xl font-extrabold">
+          <h1 className="text-4xl font-bold">
             The latest blogs of this product
           </h1>
           <p className="text-muted-foreground">
@@ -40,9 +40,9 @@ function BlogCard({
   return (
     <Link
       href={`/blog/${slug}`}
-      className="flex flex-col gap-2 items-start border rounded-md py-5 px-3 min-h-[400px]"
+      className="flex flex-col gap-4 items-start rounded-xl shadow-sm py-5 border border-muted px-4 min-h-[400px]"
     >
-      <h3 className="text-md font-semibold -mt-1 pr-7">{title}</h3>
+      <h3 className="text-md font-semibold text-primary">{title}</h3>
       <div className="w-full">
         <Image
           src={cover}
@@ -50,7 +50,7 @@ function BlogCard({
           width={400}
           height={150}
           quality={80}
-          className="w-full rounded-md object-cover h-[180px] border"
+          className="w-full rounded-md object-cover h-[180px]"
         />
       </div>
       <p className="text-sm text-muted-foreground">{description}</p>

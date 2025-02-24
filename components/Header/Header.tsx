@@ -1,6 +1,6 @@
 "use client";
 
-import { navItems, servicesLinks } from "@/app/constant";
+import { navItems, servicesLinks } from "@/constant";
 import { Button } from "@/components/ui/button";
 import {
     NavigationMenu,
@@ -34,7 +34,7 @@ export default function Header() {
     return (
         <header
             className={cn(
-                "sticky z-50 h-16 inset-[0%_0%_auto] top-0 w-full bg-white/40 backdrop-blur-lg backdrop-filter backdrop-saturate-[200%] supports-[backdrop-filter]:bg-white/30 transition-all duration-300 ease-in-out",
+                "sticky z-50 h-16 inset-[0%_0%_auto] top-0 w-full bg-white/40 backdrop-blur-lg backdrop-filter backdrop-saturate-[200%] transition-all duration-300 ease-in-out",
             )}
         >
             <Container className="flex items-center justify-between h-full">

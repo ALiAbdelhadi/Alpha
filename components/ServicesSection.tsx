@@ -1,6 +1,6 @@
 'use client';
 
-import { services } from '@/app/constant';
+import { services } from '@/constant';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { MoveRight } from 'lucide-react';

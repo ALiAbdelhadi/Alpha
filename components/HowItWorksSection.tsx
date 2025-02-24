@@ -1,4 +1,4 @@
-import { TimeLineData } from '@/app/constant'
+import { TimeLineData } from '@/constant'
 import HowItWorksTimeLine from './HowItWorksTimeLine'
 
 

@@ -33,7 +33,9 @@ The core of the project is a recursive data structure that represents the file s
 
 Here’s a basic structure for a folder:
 
-```jsx
+
+<Pre>
+{`
 const folder = {
   id: "1",
   name: "Documents",
@@ -43,7 +45,8 @@ const folder = {
     { id: "3", name: "CoverLetter.docx", type: "file" },
   ],
 };
-```
+`}
+</Pre>
 
 ### 2. Components
 
@@ -51,7 +54,8 @@ The project includes several key components to handle different aspects of the f
 
 - **FileExplorer**: Displays the entire file system and handles rendering folders and files.
 
-```jsx
+<Pre>
+{`
 // src/components/FileExplorer.js
 import React, { useState } from "react";
 import Folder from "./Folder";
@@ -97,11 +101,13 @@ const FileExplorer = () => {
 };
 
 export default FileExplorer;
-```
+`}
+</Pre>
 
 - **Folder**: Renders folders and handles nested items.
 
-```jsx
+<Pre>
+{`
 // src/components/Folder.js
 import React from "react";
 import FileExplorer from "./FileExplorer";
@@ -120,11 +126,13 @@ const Folder = ({ folder, onAdd, onRename, onDelete }) => {
 };
 
 export default Folder;
-```
+`}
+</Pre>
 
 - **File**: Renders individual files with options to rename and delete.
 
-```jsx
+<Pre>
+{`
 // src/components/File.js
 import React from "react";
 
@@ -139,13 +147,15 @@ const File = ({ file, onRename, onDelete }) => {
 };
 
 export default File;
-```
+`}
+</Pre>
 
 ### 3. Handling State and Actions
 
 State management is handled using React hooks like `useState` to manage the file system data. Actions such as adding, renaming, and deleting items update the state accordingly.
 
-```jsx
+<Pre>
+{`
 const [files, setFiles] = useState(initialData);
 
 const addItem = (parentId, type) => {
@@ -159,12 +169,11 @@ const renameItem = (id, newName) => {
 const deleteItem = (id) => {
   // Logic to delete an item
 };
-```
+`}
+</Pre>
 
 ## Conclusion: Building a Dynamic File System with React
 
 Creating a recursive file system in React is a powerful way to manage hierarchical data and provide a dynamic user experience. By leveraging React's component-based architecture and state management, you can build interactive file systems that handle complex nested structures efficiently.
 
-Check out the full implementation on [GitHub](https://github.com/nisabmohd/recursive-file-system-react) and explore how these concepts can be applied to your own projects. Happy coding!
 
-🚀📁

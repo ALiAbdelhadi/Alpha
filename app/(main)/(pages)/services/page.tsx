@@ -1,6 +1,6 @@
 'use client'
 
-import { services } from '@/app/constant'
+import { services } from '@/constant'
 import Container from '@/components/Container'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'

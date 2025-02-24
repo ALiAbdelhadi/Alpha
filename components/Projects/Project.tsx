@@ -1,4 +1,4 @@
-import { projects } from '@/app/constant';
+import { projects } from '@/constant';
 import Link from 'next/link';
 import { CardProject, CarouselProject } from '../CarouselCardsForProject';
 import Container from '../Container';

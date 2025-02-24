@@ -107,7 +107,8 @@ function Actions(props: { pullRequest: PullRequest }) {
                         and start building.
                      </p>
                      <Link
-                        href="/docs/components"
+                        href="https://alphabyte-labs.vercel.app"
+                        target="_blank"
                         className="bg-purple-900 hover:bg-purple-950 text-white font-semibold py-3 px-4 rounded-md inline-block"
                      >
                         Discover our component library

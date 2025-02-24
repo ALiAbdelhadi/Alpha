@@ -35,7 +35,7 @@ export default function Error({
         >
           Reload page
         </Button>
-        <Link href="/" className={buttonVariants({})}>
+        <Link href="/">
           Back to homepage
         </Link>
       </div>

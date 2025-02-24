@@ -1,6 +1,6 @@
 import { Typography } from "@/components/typography";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { buttonVariants } from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
 import { Author, getAllBlogStaticPaths, getBlogForSlug } from "@/lib/markdown";
 import { formatDate } from "@/lib/utils";
 import { ArrowLeftIcon } from "lucide-react";
@@ -42,16 +42,15 @@ export default async function BlogPage(props: PageProps) {
   const res = await getBlogForSlug(slug);
   if (!res) notFound();
   return (
-    <div className="lg:w-[60%] sm:[95%] md:[75%] mx-auto">
-      <Link
-        className={buttonVariants({
-          variant: "link",
-          className: "!mx-0 !px-0 mb-7 !-ml-1 ",
-        })}
-        href="/blog"
-      >
-        <ArrowLeftIcon className="w-4 h-4 mr-1.5" /> Back to blog
-      </Link>
+    <div className="lg:w-[60%] sm:w-[95%] md:w-[75%] mx-auto">
+      <Button variant={"link"} asChild>
+        <Link className="!mx-0 !px-0 mb-7 !-ml-1 flex items-center"
+          href="/blog"
+        >
+          <ArrowLeftIcon className="w-4 h-4 mr-1.5" />
+          <span>Back to blog</span>
+        </Link>
+      </Button>
       <div className="flex flex-col gap-3 pb-7 w-full mb-2">
         <p className="text-muted-foreground text-sm">
           {formatDate(res.frontmatter.date)}

@@ -29,7 +29,6 @@ export const navItems: LinkItems[] = [
     { title: "About", href: "/about" },
     { title: "Contact", href: "/contact" },
 ];
-
 export const FooterItemsCompany: LinkItems[] = [
     { title: "FAQs", href: "/faqs" },
     { title: "About", href: "/about" },

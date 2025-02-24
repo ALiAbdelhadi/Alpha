@@ -4,7 +4,7 @@ import React from "react";
 import Container from "../Container";
 import Logo from "../Logo";
 import { ModeToggle } from "../theme-toggle";
-import { FooterItemsCompany, FooterItemsLegal } from "@/app/constant";
+import { FooterItemsCompany, FooterItemsLegal } from "@/constant";
 const Footer: React.FC = () => {
     return (
         <footer className="relative bg-gradient-to-br from-white from-0% via-white via-35% to-[#02F4EE] to-100% text-[#333] py-6 md:py-12 lg:py-16 xl:py-24 z-10">

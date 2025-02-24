@@ -1,7 +1,7 @@
 "use client";
 
 import React from 'react';
-import { faqs } from "@/app/constant";
+import { faqs } from "@/constant";
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/components/ui/accordion";
 
 interface FAQ {
