@@ -34,7 +34,7 @@ export default function Header() {
     return (
         <header
             className={cn(
-                "sticky z-50 h-16 inset-[0%_0%_auto] top-0 w-full bg-white/40 backdrop-blur-lg backdrop-filter backdrop-saturate-[200%] transition-all duration-300 ease-in-out",
+                "sticky z-50 h-16 inset-[0%_0%_auto] top-0 w-full bg-white/50 dark:bg-background/40 backdrop-blur-lg backdrop-filter backdrop-saturate-[200%] transition-all duration-300 ease-in-out",
             )}
         >
             <Container className="flex items-center justify-between h-full">
@@ -48,10 +48,10 @@ export default function Header() {
                         <NavigationMenu>
                             <NavigationMenuList>
                                 <NavigationMenuItem>
-                                    <NavigationMenuTrigger className="text-[15px] font-medium">
+                                    <NavigationMenuTrigger className="text-[15px] font-medium text-foreground">
                                         Services
                                     </NavigationMenuTrigger>
-                                    <NavigationMenuContent>
+                                    <NavigationMenuContent className="bg-popover text-popover-foreground">
                                         <ul className="grid gap-3 p-6 md:w-[400px] lg:w-[600px] lg:grid-cols-[0.7fr_1fr]">
                                             <li className="row-span-3 bg-gradient-to-br from-primary/10 via-primary/[0.07] to-primary/[0.03] rounded-lg p-6">
                                                 <NavigationMenuLink asChild>
@@ -63,7 +63,7 @@ export default function Header() {
                                                             Explore our comprehensive range of development and
                                                             hosting solutions tailored to your needs.
                                                         </p>
-                                                        <Link href={"/services"} className="w-full mt-6 underline text-sm">
+                                                        <Link href={"/services"} className="w-full mt-6 underline text-sm text-primary">
                                                             View All Services
                                                         </Link>
                                                     </div>
@@ -76,7 +76,7 @@ export default function Header() {
                                                             href={service.href}
                                                             className="block select-none space-y-2 rounded-md py-5 px-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-accent/50 data-[state=open]:bg-accent/50"
                                                         >
-                                                            <div className="text-sm font-medium leading-none">
+                                                            <div className="text-sm font-medium leading-none text-foreground">
                                                                 {service.title}
                                                             </div>
                                                             <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
@@ -92,7 +92,7 @@ export default function Header() {
                                 {navItems.map((item) => (
                                     <NavigationMenuItem key={item.title}>
                                         <Link href={item.href} legacyBehavior passHref>
-                                            <NavigationMenuLink className="hover:text-primary group inline-flex h-10 w-max items-center justify-center rounded-md bg-transparent px-4 py-2 text-[15px] font-medium transition-colors disabled:pointer-events-none text-[rgba(0,_0,_0,_.85)] hover:text-[#000000] -tracking-[.01em]">
+                                            <NavigationMenuLink className="group inline-flex h-10 w-max items-center justify-center rounded-md bg-transparent px-4 py-2 text-[15px] font-medium transition-colors disabled:pointer-events-none text-foreground hover:text-primary -tracking-[.01em]">
                                                 {item.title}
                                             </NavigationMenuLink>
                                         </Link>
@@ -105,8 +105,8 @@ export default function Header() {
                 <div className="flex items-center space-x-4">
                     <Search />
                     <div className="hidden lg:flex items-center space-x-4">
-                        <Button variant="outline">Sign In</Button>
-                        <Button className="bg-primary/90 hover:bg-primary text-primary-foreground">
+                        <Button variant="outline" >Sign In</Button>
+                        <Button className="bg-primary hover:bg-primary/90 text-primary-foreground">
                             Get Started
                         </Button>
                     </div>
@@ -117,11 +117,11 @@ export default function Header() {
                                     className="z-50 w-[20px] flex flex-wrap flex-col justify-end mt-[5px] cursor-pointer"
                                     onClick={() => setIsOpen(!isOpen)}
                                 >
-                                    <span className="bg-[#333] mb-[5px] h-[2px] w-full" />
-                                    <span className="bg-[#333] mb-[5px] h-[2px] w-full" />
+                                    <span className="bg-foreground mb-[5px] h-[2px] w-full" />
+                                    <span className="bg-foreground mb-[5px] h-[2px] w-full" />
                                 </div>
                             </SheetTrigger>
-                            <SheetContent side="top" className="w-full h-full transition-all">
+                            <SheetContent side="top" className="w-full h-full transition-all bg-background text-foreground">
                                 <div className="h-[37.5rem] w-full col-span-full lg:col-span-1 flex flex-col">
                                     <ScrollArea className="relative h-[calc(100vh-4rem)] flex-1 overflow-auto">
                                         <div className="flex justify-between">
@@ -130,7 +130,7 @@ export default function Header() {
                                                     className="lg:hidden border-none outline-none cursor-pointer"
                                                     onClick={() => setIsServicesOpen(!isServicesOpen)}
                                                 >
-                                                    <span className="transition-colors hover:text-primary text-lg font-bold flex items-center text-[#333336] hover:text-[#000000] tracking-[.007em]">
+                                                    <span className="transition-colors text-lg font-bold flex items-center text-foreground hover:text-primary tracking-[.007em]">
                                                         Our Services
                                                         <ChevronDown
                                                             className={cn(
@@ -176,7 +176,7 @@ export default function Header() {
                                                         >
                                                             <Link
                                                                 href={item.href}
-                                                                className="block transition-colors text-lg font-bold text-[#333336] hover:text-[#000000] tracking-[.007em]"
+                                                                className="block transition-colors text-lg font-bold text-foreground hover:text-primary tracking-[.007em]"
                                                             >
                                                                 {item.title}
                                                             </Link>
@@ -187,7 +187,7 @@ export default function Header() {
                                                         <Button variant="outline" className="w-full">
                                                             Sign In
                                                         </Button>
-                                                        <Button className="w-full">Get Started</Button>
+                                                        <Button className="w-full bg-primary hover:bg-primary/90 text-primary-foreground">Get Started</Button>
                                                     </div>
                                                 </div>
                                             </div>

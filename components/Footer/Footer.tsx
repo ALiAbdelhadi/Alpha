@@ -7,7 +7,7 @@ import { ModeToggle } from "../theme-toggle";
 import { FooterItemsCompany, FooterItemsLegal } from "@/constant";
 const Footer: React.FC = () => {
     return (
-        <footer className="relative bg-gradient-to-br from-white from-0% via-white via-35% to-[#02F4EE] to-100% text-[#333] py-6 md:py-12 lg:py-16 xl:py-24 z-10">
+        <footer className="relative bg-gradient-to-br from-background from-0% via-background via-35% to-primary/90 to-100% text-[#333] py-6 md:py-12 lg:py-16 xl:py-24 z-10">
             <Container className="flex flex-col md:flex-row justify-between items-start">
                 <div className="mb-12 md:mb-0">
                     <div className="flex items-center mb-6">

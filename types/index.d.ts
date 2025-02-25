@@ -89,8 +89,3 @@ declare type Page = {
     title: string;
     href: string
 };
-
-type NoteProps = PropsWithChildren & {
-    title?: string;
-    type?: "note" | "danger" | "warning" | "success";
-};

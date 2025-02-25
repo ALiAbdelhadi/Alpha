@@ -44,20 +44,17 @@ const Landing = () => {
                 ref={mainRef}
                 className="relative flex min-h-[86.5vh] py-8 items-center justify-center overflow-hidden transition-colors duration-300  "
             >
-                {/* Fixed gradient background */}
-                <div className="absolute inset-0 bg-gradient-to-b from-[#02F4EE] from-0%  via-primary/5  to-white via-45%  transition-colors duration-700">
+                <div className="absolute inset-0 bg-gradient-to-b from-primary from-[27%] via-primary/5 to-background via-45% to-[70%] transition-colors duration-700">
                     <div className="absolute inset-0 backdrop-blur-[100px]" />
-                    {/* Noise texture */}
                     <div className="absolute inset-0 bg-noise opacity-[0.015] mix-blend-overlay" />
                 </div>
-                {/* Main content */}
                 <Container className='relative'>
                     <div className="grid items-center gap-12 lg:gap-16">
                         <div className="flex flex-col justify-center space-y-12 lg:space-y-16 max-w-4xl">
                             <div className="space-y-8">
                                 <h1 ref={headingRef} className="font-semibold text-4xl md:text-5xl lg:text-6xl text-primary-foreground">
                                     Turning your ideas into
-                                    <span className="gradient-text bg-gradient-to-r from-[#009C96] via-[#00D5CD]  to-secondary bg-[length:100%_100%] bg-clip-text px-2 text-transparent">
+                                    <span className="gradient-text bg-gradient-to-r from-primary/90 via-primary to-secondary bg-[length:100%_100%] bg-clip-text px-2 text-transparent">
                                         digital solutions
                                     </span>
                                     that work.
